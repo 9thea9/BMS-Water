@@ -1,0 +1,63 @@
+---
+title: "long-to-wide 2"
+author: "VaF"
+date: "2024-03-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### **BMS_Water_Dataset transposing code**
+
+```{r}
+#Import your dataset and rename it!
+data.bms<- BMS_Water_Dataset_original
+```
+
+```{r}
+# add unique identity column combining code and date from each year, site, subsample and habitat--> data aggregate by substrates
+data.bms$code<-paste(data.bms$ID, data.bms$`dwc:habitat(1)` , sep=" ")  
+
+
+# ALTERNATIVE add unique identity column combining code and date from each year, site--> data aggregate by sites
+
+data.bms$code<-paste(data.bms$`dwc:eventID` , data.bms$year , sep=" ")  
+
+```
+
+```{r}
+
+# add unique taxa column combining all taxonomic levels 
+data.bms$Taxa<-paste(data.bms$Order, data.bms$Family, data.bms$Subfamily,data.bms$Genus, data.bms$Species, sep="_")  
+```
+
+```{r}
+# create another dataset that only include the code, taxa and Abundance (number of individuals) or density [Indv/m²].
+data.bms2<-data.bms %>% 
+  dplyr::select(code, Taxa, `dws:sampleSizeValue`)
+```
+
+```{r}
+# longtowide
+data.bms.wide<-dcast(data.bms2,code~Taxa, sum)
+```
+
+```{r}
+# add two new columns splitting the PUNTO variables into "code" and "substrate" information
+data.bms.wide<-cbind(data.bms.wide,
+colsplit(data.bms.wide$code, " ", c("ID", "Substrate"))
+)
+
+
+# ALTERNATIVE: add two new columns splitting the PUNTO variables into "code" and "Year" information
+data.bms.wide<-cbind(data.bms.wide,
+colsplit(data.bms.wide$code, " ", c("ID", "Year"))
+)
+```
+
+```{r}
+# Download and save new data file
+write.csv(data.bms.wide, "data.bms.wide.MZB_abundances_Sites.csv")
+```

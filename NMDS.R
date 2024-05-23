@@ -17,9 +17,10 @@ setwd("C:/Users/tschwingshackl/OneDrive - Scientific Network South Tyrol/BMS")
 data<-read.csv("matrix for nmds.csv")
 
 
-
+#formatting
 rownames(data)<-data$X
 species<-data$X
+#only numeric columns 
 data<-data[c(2:82)]
 
 

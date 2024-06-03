@@ -142,3 +142,7 @@ write.csv(data_reference, "BMS sites references.csv")
 #optional -> just select EP species 
 EP<-data_all%>% subset(Order==c("Ephemeroptera", "Plecoptera"))
 write.csv(EP, "BMS EP only.csv")
+
+#for plotting in qgis
+points_all<-data_all%>%group_by(`dwc:eventID`, year)%>%summarise(long=mean(as.numeric(`dwc:decimalLongitude`)), lat=mean(as.numeric(`dwc:decimalLatitude`)))
+write.csv(points_all, "BMS point for gis.csv")

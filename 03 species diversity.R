@@ -68,7 +68,7 @@ diversity<-new_wide_relative[c(245, 246)] #select last two columns of the datafr
 
 diversity_data<-inner_join(diversity, data)
 
-#write.csv(diversity_data, "shannon diversity.csv")
+#write.csv(diversity_data, "BMS all_diversity.csv")
 
 names(new_wide_relative)
 

@@ -103,6 +103,19 @@ dev.off()
 cluster_data<-vegdist(species, method="bray")
 cluster<-hclust(cluster_data, method="ward.D")
 
+cluster_table<-as.data.frame(cluster$height)
+rownames(cluster_table)<-rownames(species)
+ID_year<-rownames(species)
+cluster_table$ID_year<-ID_year[-1]
+
+#still need to figure out how this works 
+coordinates<-read.csv("BMS point for gis.csv")
+coordinates$ID_year<-paste(coordinates$year, coordinates$dwc.eventID, sep=" ")
+coordinates_cluster<-inner_join(coordinates, cluster_table)
+
+plot(coordinates_cluster$long, coordinates_cluster$lat, col=as.factor(coordinates_cluster$cluster.order), pch=16, cex=5)
+write.csv(coordinates_cluster, "BMS point for gis.csv")
+
 png("Cluster all_species.png", width = 14, height=8, unit="in", res=600)
 plot(cluster, main="Sites clustering based on Community", cex=0.6) # color t, he labels in different colors
 rect.hclust(cluster,k=7)

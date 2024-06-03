@@ -128,8 +128,9 @@ yearly_points <- c(#for 2021
                   #for 2024
                   "2024 32352", "2024 31162", "2024 32231", #sampled 21
                   "2024 12352", "2024 33132", "2024 32232", #sampled 22
-                  "2024 12352", "2024 33132", "2024 32232", #sampled 23
+                  "2024 12352", "2024 33132", "2024 32232" #sampled 23
                    ) 
+#right now there remain only 9 categories because all reference sites of the 2024 tipologies are excluded
 
 data_all <- result [!(result$year_cat %in% yearly_points), ] # select rows
 data_reference<-result [(result$year_cat %in% yearly_points), ] # select rows

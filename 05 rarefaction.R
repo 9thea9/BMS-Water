@@ -23,7 +23,17 @@ data<-read.csv( "BMS all_diversity.csv")#edited dataset with including shannon d
 data$dwc.habitat.1.<-tolower(data$dwc.habitat.1.)
 levels(as.factor(data$dwc.habitat.1.))
 
-names(data)
+#count how many times each substrate was sampled
+substrate_count <- data %>%
+  group_by(ID, dwc.habitat.1.) %>%
+  summarise(count = n())
+
+substrate<-substrate_count%>%
+  group_by(dwc.habitat.1.)%>%
+  summarise(n= n())
+sum(substrate$n)/8
+
+data2<-inner_join(substrate, data)
 #select category/substrate, point name, taxa and abundance
 
 substrate_rarefaction<-data[c(34, 25, 54)]%>% #select point names, taxon and sample size value # and family and land use
@@ -45,7 +55,7 @@ substrate_rare_wide<-as.data.frame(substrate_rare_wide[-1])
 
 substrate_rare_long<-t(substrate_rare_wide)
 substrate_rare_long<-as.data.frame(substrate_rare_long)
-colnames(substrate_rare_long)<-paste (names)
+colnames(substrate_rare_long)<-paste (names, "n=", substrate$n)
 
 #totalrarefaction<-totalrarefaction[7]
 iNEXT_total<-iNEXT(substrate_rare_long, q=1)#q=1 shannon index, takes a long time
@@ -61,4 +71,6 @@ ggiNEXT(iNEXT_total, type=1)+
   scale_fill_manual(values=color)+
   theme_minimal()
 dev.off()
+
+
 

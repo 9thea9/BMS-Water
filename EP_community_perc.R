@@ -10,15 +10,13 @@ library(reshape2)
 library(openxlsx)
 
 setwd("C:/Users/fvallefuoco/OneDrive - Scientific Network South Tyrol/VaF/R")
-#load the data - TOT SPECIES/TAXA
+#load the data - TOT SPECIES/TAXA (db after the species ambiguity resolution --> Thea' file)
 data_bms<-read_excel("No_ambiguous_sp_BMS.xlsx")
 
 # see some character cols
 unique(data_bms$dwc.habitat.1.) # some capitalization issues 
 data_bms$dwc.habitat.1. <- str_to_lower(data_bms$dwc.habitat.1., locale = "en")
 unique(data_bms$dwc.habitat.1.)
-
-data_bms <- data_bms %>% mutate(Taxa = paste(Order, Family, Subfamily, Genus, Species, sep = "_")) 
 
 
 # add two new columns splitting the eventID variables into "category" and "subsample" information
@@ -183,7 +181,7 @@ for (cat in categories) {
       col=Species_col[match(pie_labels, unique_species)], cex=2.5)
 }
 
-#while (!is.null(dev.list()))  
+
 dev.off()
 
 

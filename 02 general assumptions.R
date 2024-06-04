@@ -84,7 +84,7 @@ dev.off()#to safe the plot
 
 ###The skewness coefficient can be computed using the moments R packages:
 library(moments)
-
+#ref https://www.datanovia.com/en/lessons/transform-data-to-normal-distribution-in-r/
 #The direction of skewness is given by the sign of the skewness coefficient:
 #A zero means no skewness at all (normal distribution).
 #A negative value means the distribution is negatively skewed.

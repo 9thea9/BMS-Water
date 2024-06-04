@@ -1,4 +1,4 @@
-#EP su comunity
+#EP su community
 #Biodiversity Monitoring South Tyrol - Ephemeroptera, Plecoptera Taxa only
 
 library(readxl)

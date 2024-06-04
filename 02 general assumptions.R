@@ -84,11 +84,19 @@ dev.off()#to safe the plot
 
 ###The skewness coefficient can be computed using the moments R packages:
 library(moments)
-skewness(data$ORP..mV., na.rm = TRUE)
+
 #The direction of skewness is given by the sign of the skewness coefficient:
 #A zero means no skewness at all (normal distribution).
 #A negative value means the distribution is negatively skewed.
 #A positive value means the distribution is positively skewed.
+
+#calculate The skewness coefficient for our variables
+s.coeff <-rep(NA, length(names))
+
+for (i in seq_along(names)) {
+  s.coeff[i] <- skewness(data[[names[i]]], na.rm = TRUE)
+} 
+
 
 ###Transformation methods
 #--> square-root for moderate skew:

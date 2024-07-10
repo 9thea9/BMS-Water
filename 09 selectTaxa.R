@@ -6,19 +6,13 @@ library(tidyr)
 setwd("C:/Users/tschwingshackl/OneDrive - Scientific Network South Tyrol/BMS")
 
 
-#load needed dataframe, depending on question 
-
+#load needed dataframe
 data<-read.csv("BMS sites all.csv")
-names(data)
+names(data) #check
 
 
 
-
-# Sample data frame
-# data <- data.frame(site = c(...), subsample = c(...), Order = c(...), value = c(...))
-
-
-# Function to ensure each group has both "Ephemeroptera" and "Plecoptera"
+# Create a function to ensure each group has both "Ephemeroptera" and "Plecoptera"
 ensure_orders <- function(data) {
   # Check if "Ephemeroptera" is present, if not add row with 0 value
   if (!"Ephemeroptera" %in% data$Order) {
@@ -34,7 +28,10 @@ ensure_orders <- function(data) {
   }
   return(data)
 }
-# Main processing pipeline
+
+
+# Apply the function to the whole dataframe
+#if one group does not contain Ephemeroptera or Plecoptera, a row is added with abundance = 0 
 result <- data %>%
   group_by(dwc.eventID, Subsample.ID, year, ID) %>%                # Group by site and subsample
   group_modify(~ ensure_orders(.x)) %>%        # Ensure each group has the required Orders
@@ -42,6 +39,9 @@ result <- data %>%
 
 
 names(result)
+
+#next, copy abiotic data to this new  rows 
+#select values that need to be copied 
 to_copy<-names(result[-c(1,4,25:30)])
 
 
@@ -49,7 +49,6 @@ to_copy<-names(result[-c(1,4,25:30)])
 na_rows <- which(rowSums(is.na(result[, to_copy])) > 0)
 
 # Group by ID and fill NA values in specified columns
-result$dwc.eventID<-as.factor(result$dwc.eventID)
 
 filled_df <- result %>%
   group_by(ID, dwc.eventID) %>%
@@ -57,7 +56,10 @@ filled_df <- result %>%
   ungroup()
 
 
+#check if observations got lost or not 
+identical(levels(data$ID), levels(filled_df$ID))
 
+#last, just select rows with desired orders 
 EP <- filled_df[filled_df$Order %in% c("Ephemeroptera", "Plecoptera"), ]
 
 
